@@ -1,0 +1,668 @@
+import Extras(rotatedPoint,rgb,randomAnimationOf)
+main = randomAnimationOf(animation)
+
+animation(random,t) = entire(random,remainder(t,42))
+entire(random,t) = if t < 0 then blank
+       else if t < 4 then scene1(random,t)         --4
+       else if t < 9 then scene2(random,t-4)       --5
+       else if t < 17 then scene3(t-9)             --8
+       else if t < 24 then scene4(t-17)            --7
+       else if t < 29 then scene5(t-24)            --5
+       else if t < 33 then scene6(t-29)            --4
+       else if t < 37 then scene7(t-33)            --4
+       else if t < 42 then scene8(t-37)            --5
+       else blank
+
+
+
+-----------scene 1---------------------------------------------
+
+scene1(random,t) = picture(random,t)
+  where
+  picture(random,t) = approach(t) & backgroundStars
+  approach(t) = translated(myCapsule,7*t,-7*t)
+  backgroundStars = stars(random) & solidRectangle(20,20)
+  star(random) = colored(solidCircle(0.1*random#1),white)
+  stars(random) = pictures [translated(star(random),-10+20*random#x,-10+20*random#y) | x <- [1..80] | y <- [80..160]]
+
+-----------scene 2-----------------------------------------------
+
+scene2(random,t) = translated(approach(t),-2,2) & mars(t)  
+  & background2(random,t) 
+  where
+  approach(t) = if t < 2 then translated(myCapsuleT(t),7*t,-7*t)
+    else if t > 2 then  scaled(thing(t),1/2*(4/t),1/2*(4/t))
+    else blank
+  thing(t) = translated(myCapsuleT(t),7*t,-7*t)
+  mars(t) = if t < 0.1120 then blank 
+            else translated(colored(solidCircle(9),rgb(219,90,4)),10,-10)
+  star(random) = colored(solidCircle(0.1*random#1),white)
+  stars(random) = pictures [translated(star(random),-10+20*random#x,-10+20*random#y) | x <- [1..80] | y <- [80..160]]
+  background2(random,t) = stars(random) & colored(solidRectangle(20,20),black)
+  myCapsuleT(t) = translated(scaled(rotated(inSightCapsule,45),1*1/(4*t+0.000001),1*1/(4*t+0.000001)),-12,12)
+       
+---------scene 3--------------
+scene3(t) = translated(inSightParachute3(t),0,t*(-4)) & translated(background,0,0.5*t)
+  where
+  background = pictures([translated(colored(solidRectangle(20,2),RGBA(y,y,y,0.5)),0,x) | x <- [9,7..(-18)] | y <- [0/255,10/255..255/255]]) 
+             & pictures([translated(colored(solidRectangle(20,2),RGBA(y,y,y,0.6)),0,x) | x <- [10,8..(-18)] | y <- [5/255,15/255..255/255]])
+             & colored(solidRectangle(40,40),light(red))            
+
+  inSightParachute(t) = colored(thickArc(0, 180, 5, 10), white)
+                     & arc(0, 180, 10)
+                     & solidRectangle(20, 0.05)
+                     & translated(rotated(solidRectangle(0.1, 13.6), 40), -5.5, -5.3)
+                     & translated(rotated(solidRectangle(0.1, 13.6), -40), 5.5, -5.3)
+
+  inSightParachute3(t) = inSightCapsule2(t) & inSightParachute2(t)
+
+  inSightParachute2(t) = translated(scaled(inSightParachute(t),0.5,0.5),0,15.67)
+
+  inSightCapsule2(t) = scaled(translated(inSightCapsule,0,15),0.5,0.5)
+
+
+
+
+
+
+  sky = colored(solidRectangle(20,20), light(light(yellow)))
+      & colored(solidRectangle(20,20), translucent(dark(white)))
+------------scene 4--------------
+
+scene4(t) = dilated(shuttle(t), 0.3) & translated(background,0,t)
+  where
+  shuttle(t) = movieA(t) 
+               & translated(dilated(inSightCapsule, 1.4), 0, 3) 
+               & inSightRover(t)  
+               & movieB(t) 
+               & translated(inSightParachute, 0,22)
+  background = pictures([translated(colored(solidRectangle(20,2),RGBA(y,y,y,0.4)),0,x) | x <- [9,7..(-18)] | y <- [0/255,10/255..255/255]]) 
+             & pictures([translated(colored(solidRectangle(20,2),RGBA(y,y,y,0.5)),0,x) | x <- [10,8..(-18)] | y <- [5/255,15/255..255/255]])
+             & colored(solidRectangle(40,40),light(red))  
+  inSightRover(t) =  solidRectangle(12,0.1)
+                & translated(solidRectangle(8,2), 0, -1)
+                & translated(bulb, -4, 0)
+                & translated(solidRectangle(0.2, 1), 2, 0.5)
+                & translated(solidRectangle(0.6, 0.7), 1.7, 0.35)
+                & translated(solidRectangle(0.5, 0.4), -3.85, -2)
+                & translated(solidRectangle(0.5, 0.4), -3.5, -2.1)
+                & translated(solidRectangle(0.5, 0.4), 3.85, -2)
+                & translated(solidRectangle(0.5, 0.4), 3.5, -2.1)              
+  bulb = thickArc(0, 180, 1, 0.2) 
+                & thickArc(0, 180, 0.8, 0.2) 
+                & thickArc(0, 180, 0.6, 0.2)
+                & thickArc(0, 180, 0.4, 0.2)              
+                & thickArc(0, 180, 0.2, 0.2)
+                & thickArc(0, 180, 0.1, 0.3)                           
+  oneLeg = translated(rotated(solidRectangle(4.5, 0.15), 130), 5.5, -1.8)
+         & translated(rotated(solidRectangle(4.5, 0.15), 155), 4.78, -2.6)
+         & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), -45), 6.8, -3.5)     
+  twoLeg = translated(rotated(solidRectangle(4.5, 0.15), -130), -5.5, -1.8)
+         & translated(rotated(solidRectangle(4.5, 0.15), -155), -4.78, -2.6)
+         & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), 45), -6.8, -3.5)
+  threeLeg = translated(rotated(solidRectangle(1.5, 0.15), 90), 0, -2.7)
+      & translated(rotated(solidRectangle(1.5, 0.15), 110), -0.3, -2.7)
+      & translated(rotated(solidRectangle(1.5, 0.15), -110), 0.3, -2.7)
+      & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), 90), 0, -3.5)
+  leg1 = translated(oneLeg, 2,2)
+  leg2 = translated(twoLeg, -2,2)
+  leg3 = translated(threeLeg, 0,2)
+  tleg1(t) = translated(leg1, t,-t)
+  tleg2(t) = translated(leg2, -t,-t)
+  tleg3(t) = translated(leg3, 0,-t)
+  movieB(t) = 
+   if t < 3 then leg1 & leg2 & leg3
+   else if t < 5 then tleg1(t-3) & tleg2(t-3) & tleg3(t-3)
+   else translated(leg1, 2,-2) & translated(leg2, -2,-2) & translated(leg3, 0,-2)
+  inSightCapsule =  colored(thickClosedCurve([
+                       (-1,6)
+                       , (-1,6)
+                       , ( -2.8, 3)
+                       , ( -2.8, 3)
+                       , ( -3, 3)
+                       , ( -3, 3)
+                       , (-7,-3)
+                       , (-7,-3)
+                       , (-6.75, -3.25)
+                       , (6.75, -3.25)
+                       , (7,-3) 
+                       , (7,-3)
+                       , ( 3, 3)
+                       , ( 3, 3)
+                       , ( 2.8, 3)
+                       , ( 2.8, 3)
+                       , (1, 6)
+                       , (1,6)
+                       , (0, 5.9)
+                       ]
+                       , 0.2), grey(0.3))
+
+                   & colored(thickCurve([
+                       (-6.75, -3.25)
+                       , (0, -3.5)
+                       , (6.75, -3.25)
+                       ]
+                       , 0.2), grey(0.3)) 
+                   & colored(thickCurve([
+                       ( -2.8, 3)
+                       , (0, 2.8) 
+                       , ( 2.8, 3)
+                       ]
+                       , 0.2), grey(0.3))
+                   & colored(translated(solidCircle(0.16), 2, 2.15), white)
+                   & translated(solidCircle(0.3), 2, 2)
+                   & translated(solidCircle(0.45), 3, -2.1)
+                   & translated(solidCircle(0.45), -3, -2.1)
+                   & colored(solidClosedCurve([
+                       (-1,6)
+                       , (-1,6)
+                       , ( -2.8, 3)
+                       , ( -2.8, 3)
+                       , ( -3, 3)
+                       , ( -3, 3)
+                       , (-7,-3)
+                       , (-7,-3)
+                       , (-6.75, -3.25)
+                       , (-6.75, -3.25)
+                       , (0, -3.5)
+                       , (6.75, -3.25)
+                       , (6.75, -3.25)
+                       , (7,-3) 
+                       , (7,-3)
+                       , ( 3, 3)
+                       , ( 3, 3)
+                       , ( 2.8, 3)
+                       , ( 2.8, 3)
+                       , (1, 6)
+                       , (1,6)
+                       , (0, 5.9)
+                       ]), grey(0.3))                
+  bottom = colored(solidClosedCurve([
+                       (-6.75, -3.25)
+                       , (-4, -4.25)
+                       , (4, -4.25)
+                       , (6.75, -3.25)
+                         ]), grey(0.45))                     
+  dbottom = dilated(bottom, 1.3)                     
+  tbottom = translated(dbottom, 0,2.55)
+  ttbottom = translated(tbottom, 9,0)                                              
+  tbottom2 = translated(bottom,0,3)                       
+  rbottom2(t) = rotated(tbottom2, t*200-330)
+  trbottom(t) = translated(rbottom2(t), 0,t*15-2)
+  movieA(t)  = 
+    if t < 2 then tbottom
+    else if t < 30 then trbottom(t-2)
+    else blank                    
+  inSightParachute = colored(thickArc(0, 180, 5, 10), white)
+                     & arc(0, 180, 10)
+                     & solidRectangle(20, 0.05)
+                     & translated(rotated(solidRectangle(0.1, 13.6), 40), -5.5, -5.3)
+                     & translated(rotated(solidRectangle(0.1, 13.6), -40), 5.5, -5.3)                       
+
+------------scene 5--------------
+
+scene5(t)= translated(dilated(parachute,0.2),0,(-1*p(t))+9)
+         & translated(dilated(rover,0.15),0,(-1*r(t))+8)
+         & translated(background,0,t)
+  where
+  r(t) =
+    if t < 0 then slow(t)
+    else if t < 3 then slow(t)
+    else if t < 6 then fast(t)
+
+    else -100
+
+  p(t) =
+    if t < 0 then slow(t)
+    else if t < 3 then slow(t)
+    else if t < 6 then slow(t)
+    else -100
+
+  s(t) =
+    if t < 0 then slow(t)
+    else if t < 3 then slow(t)
+    else if t < 6 then slow(t)
+    else -100
+
+  slow(t)=t*2
+  fast(t)=(t^(t/2)+2.5*1/2)
+  up(t)=t*(-3)+15
+
+  parachute = dilated(translated(inSightParachute, 0, 9) & translated(inSightCapsule, 0, -10), 1/2)
+
+  inSightParachute = colored(thickArc(0, 180, 5, 10), white)
+                     & arc(0, 180, 10)
+                     & solidRectangle(20, 0.05)
+                     & translated(rotated(solidRectangle(0.1, 13.6), 40), -5.5, -5.3)
+                     & translated(rotated(solidRectangle(0.1, 13.6), -40), 5.5, -5.3)
+
+
+
+  background = pictures([translated(colored(solidRectangle(20,2),RGBA(y,y,y,0.5)),0,x) | x <- [9,7..(-18)] | y <- [0/255,10/255..255/255]]) 
+             & pictures([translated(colored(solidRectangle(20,2),RGBA(y,y,y,0.5)),0,x) | x <- [10,8..(-18)] | y <- [5/255,15/255..255/255]])
+             & colored(solidRectangle(40,40),light(red))   
+
+
+  inSightCapsule =  dilated(colored(thickClosedCurve([
+                       (-1,6)
+                       , (-1,6)
+                       , ( -2.8, 3)
+                       , ( -2.8, 3)
+                       , ( -3, 3)
+                       , ( -3, 3)
+                       , (-7,-3)
+                       , (-7,-3)
+                       , (-6.75, -3.25)
+                       , (6.75, -3.25)
+                       , (7,-3) 
+                       , (7,-3)
+                       , ( 3, 3)
+                       , ( 3, 3)
+                       , ( 2.8, 3)
+                       , ( 2.8, 3)
+                       , (1, 6)
+                       , (1,6)
+                       , (0, 5.9)
+                       ]
+                       , 0.2), grey(0.3))
+
+                   & colored(thickCurve([
+                       (-6.75, -3.25)
+                       , (0, -3.5)
+                       , (6.75, -3.25)
+                       ]
+                       , 0.2), grey(0.3)) 
+                   & colored(thickCurve([
+                       ( -2.8, 3)
+                       , (0, 2.8) 
+                       , ( 2.8, 3)
+                       ]
+                       , 0.2), grey(0.3))
+                   & colored(translated(solidCircle(0.16), 2, 2.15), white)
+                   & translated(solidCircle(0.3), 2, 2)
+                   & translated(solidCircle(0.45), 3, -2.1)
+                   & translated(solidCircle(0.45), -3, -2.1)
+                   & colored(solidClosedCurve([
+                       (-1,6)
+                       , (-1,6)
+                       , ( -2.8, 3)
+                       , ( -2.8, 3)
+                       , ( -3, 3)
+                       , ( -3, 3)
+                       , (-7,-3)
+                       , (-7,-3)
+                       , (-6.75, -3.25)
+                       , (-6.75, -3.25)
+                       , (0, -3.5)
+                       , (6.75, -3.25)
+                       , (6.75, -3.25)
+                       , (7,-3) 
+                       , (7,-3)
+                       , ( 3, 3)
+                       , ( 3, 3)
+                       , ( 2.8, 3)
+                       , ( 2.8, 3)
+                       , (1, 6)
+                       , (1,6)
+                       , (0, 5.9)
+                       ]), grey(0.3))
+                    , 1.4)
+
+
+  bottom = colored(solidClosedCurve([
+                       (-6.75, -3.25)
+                       , (-4, -4.25)
+                       , (4, -4.25)
+                       , (6.75, -3.25)
+                       ]), grey(0.45)) 
+  rover =  colored(solidRectangle(12,0.1), grey(0.4))
+                & colored(translated(solidRectangle(8,2), 0, -1), grey(0.4))
+                & colored(translated(bulb, -4, 0), yellow)
+                & translated(solidRectangle(0.2, 1), 2, 0.5)
+                & translated(solidRectangle(0.6, 0.7), 1.7, 0.35)
+                & translated(solidRectangle(0.5, 0.4), -3.85, -2)
+                & translated(solidRectangle(0.5, 0.4), -3.5, -2.1)
+                & translated(solidRectangle(0.5, 0.4), 3.85, -2)
+                & translated(solidRectangle(0.5, 0.4), 3.5, -2.1)
+                & colored(oneLeg, grey(0.4))
+                & colored(twoLeg, grey(0.4))
+                & colored(threeLeg, grey(0.4))
+
+  bulb = thickArc(0, 180, 1, 0.2) 
+                & thickArc(0, 180, 0.8, 0.2) 
+                & thickArc(0, 180, 0.6, 0.2)
+                & thickArc(0, 180, 0.4, 0.2)              
+                & thickArc(0, 180, 0.2, 0.2)
+                & thickArc(0, 180, 0.1, 0.3) 
+  oneLeg = translated(rotated(solidRectangle(4.5, 0.15), 130), 5.5, -1.8)
+         & translated(rotated(solidRectangle(4.5, 0.15), 155), 4.78, -2.6)
+         & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), -45), 6.8, -3.5)     
+  twoLeg = translated(rotated(solidRectangle(4.5, 0.15), -130), -5.5, -1.8)
+         & translated(rotated(solidRectangle(4.5, 0.15), -155), -4.78, -2.6)
+         & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), 45), -6.8, -3.5)
+  threeLeg = translated(rotated(solidRectangle(1.5, 0.15), 90), 0, -2.7)
+      & translated(rotated(solidRectangle(1.5, 0.15), 110), -0.3, -2.7)
+      & translated(rotated(solidRectangle(1.5, 0.15), -110), 0.3, -2.7)
+      & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), 90), 0, -3.5)
+
+------scene 6 & 7----------------------------------------------
+
+scene6(t) = movieLander(remainder(t,4)) & background6
+
+background = blank
+
+movieLander(t) = if t < 0 then blank
+            else if t < 4 then translated(scaledRover,0,-17/4*t+12)
+            else translated(scaledRover,0,-5)
+
+scene7(t) = moviePanel1(remainder(t,4)) & moviePanel2(remainder(t,4)) 
+            & translated(scaledRover,0,-5) & background6
+
+moviePanel1(t) = if t < 0 then blank
+            else if t < 3 then translated(rotated(panel,180*t/3),-2,-5)
+            else if t < 4 then translated(rotated(panel,180),-2,-5)
+            else blank
+            
+moviePanel2(t) = if t < 0 then blank
+            else if t < 3 then translated(rotated(panel,-180*t/3-180),2,-5)
+            else if t < 4 then translated(rotated(panel,0),2,-5)
+            else blank
+            
+panel = translated(solidRectangle(2,0.1),1,0)
+
+
+scaledRover = dilated(inSightRover,0.5)
+
+-------------scene 8 ---------------------
+
+scene8(t) = movieTop(t)
+            & backgroundTop
+ where
+  movieTop(t) = if t < 0 then blank
+           else if t < 1 then dilated(inSightRoverTopView,0.8) & bothPanels(0)
+           else if t < 10 then dilated(inSightRoverTopView,0.8) & bothPanels(t-1)
+           else blank
+
+  backgroundTop = colored(solidRectangle(20,20),rgb(224, 138, 85))
+  bothPanels(t) = translated(dilated(fullPanel(t),0.5),-7,0) & translated(rotated(dilated(fullPanel(t),0.5),180),7,0)
+  fullPanel(t) =  stick & panelTop(t)         
+  panelTop(t) = colored(thickArc(0,100*t,2,4), rgb(246,166,2))
+  stick = rotated(translated(colored(solidRectangle(0.2,4),black),0,-2),90)
+
+  inSightRoverTopView = 
+                       colored(translated(solidCircle(0.3), 2,2), blue)
+                       & colored(translated(solidCircle(1.4), 2,2), grey(0.6))
+
+                       & colored(polyline([(0, -5), (2, -5), (2, -4), (3, -4), (3, -2), (-2, -2), (-2, -3), (-1, -3), (-1, -4), (0, -4), (0, -5)]), white)
+
+                       & translated(colored(solidCircle(0.1), white), 0, -3)
+                       & translated(colored(solidCircle(0.1), white), 1, -3)
+                       & translated(colored(solidCircle(0.1), white), 2, -3)
+                       & translated(colored(solidCircle(0.1), white), 1, -4)
+
+                       & colored(translated(cube, 0.5, -4.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 1.5, -4.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 0.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 1.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 2.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 2.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 1.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, -0.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 0.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, -0.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, -1.5, -2.5), light(dark(dark(dark(blue)))))
+
+
+
+                       & rotated(translated(colored(polyline([(0, -5), (2, -5), (2, -4), (3, -4), (3, -2), (-2, -2), (-2, -3), (-1, -3), (-1, -4), (0, -4), (0, -5)]), white)
+
+                       & translated(colored(solidCircle(0.1), white), 0, -3)
+                       & translated(colored(solidCircle(0.1), white), 1, -3)
+                       & translated(colored(solidCircle(0.1), white), 2, -3)
+                       & translated(colored(solidCircle(0.1), white), 1, -4)
+
+                       & colored(translated(cube, 0.5, -4.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 1.5, -4.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 0.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 1.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 2.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 2.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 1.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, -0.5, -3.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, 0.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, -0.5, -2.5), light(dark(dark(dark(blue)))))
+                       & colored(translated(cube, -1.5, -2.5), light(dark(dark(dark(blue))))), -2, 0), -90)
+
+                       & colored(rotated(solidPolygon(points), 22.5), grey(0.3))
+                       & thickPolyline([(-5.25, -3.75), (-6, -6), (-3.75, -5.25)], 0.1) 
+                       & thickPolyline([(-4.5, -4.5), (-6, -6), (-4.5, -4.5)], 0.1) 
+                       & translated(rotated(scaled(solidCircle(0.8), 0.2, 1), 45),-5.95, -5.95)
+
+                       & thickPolyline([(5.25, -3.75), (6, -6), (3.75, -5.25)], 0.1) 
+                       & thickPolyline([(4.5, -4.5), (6, -6), (4.5, -4.5)], 0.1) 
+                       & translated(rotated(scaled(solidCircle(0.8), 0.2, 1), -45),5.95, -5.95)
+
+                       & rotated(thickPolyline([(5.25, -3.75), (6, -6), (3.75, -5.25)], 0.1) 
+                       & thickPolyline([(4.5, -4.5), (6, -6), (4.5, -4.5)], 0.1) 
+                       & translated(rotated(scaled(solidCircle(0.8), 0.2, 1), -45),5.95, -5.95), 135)
+  
+
+  points = [p1, p2, p3, p4, p5, p6, p7, p8]
+
+  p1 = (0,7)
+  p2 = rotatedPoint(p1, 360/8)
+  p3 = rotatedPoint(p2, 360/8)
+  p4 = rotatedPoint(p3, 360/8)
+  p5 = rotatedPoint(p4, 360/8)
+  p6 = rotatedPoint(p5, 360/8)
+  p7 = rotatedPoint(p6, 360/8)
+  p8 = rotatedPoint(p7, 360/8)
+
+  cube = solidRectangle(1,1)
+
+-------------------------------------------------------
+
+--graphics
+
+myCapsule = translated(scaled(rotated(inSightCapsule,45),0.1,0.1),-12,12)
+inSightCapsule =  colored(thickClosedCurve([
+                   (-1,6)
+                   , (-1,6)
+                   , ( -2.8, 3)
+                   , ( -2.8, 3)
+                   , ( -3, 3)
+                   , ( -3, 3)
+                   , (-7,-3)
+                   , (-7,-3)
+                   , (-6.75, -3.25)
+                   , (6.75, -3.25)
+                   , (7,-3) 
+                   , (7,-3)
+                   , ( 3, 3)
+                   , ( 3, 3)
+                   , ( 2.8, 3)
+                   , ( 2.8, 3)
+                   , (1, 6)
+                   , (1,6)
+                   , (0, 5.9)
+                   ]
+                   , 0.2), grey(0.3))
+
+               & colored(thickCurve([
+                   (-6.75, -3.25)
+                   , (0, -3.5)
+                   , (6.75, -3.25)
+                   ]
+                   , 0.2), grey(0.3)) 
+               & colored(thickCurve([
+                   ( -2.8, 3)
+                   , (0, 2.8) 
+                   , ( 2.8, 3)
+                   ]
+                   , 0.2), grey(0.3))
+               & colored(translated(solidCircle(0.16), 2, 2.15), white)
+               & translated(solidCircle(0.3), 2, 2)
+               & translated(solidCircle(0.45), 3, -2.1)
+               & translated(solidCircle(0.45), -3, -2.1)
+               & colored(solidClosedCurve([
+                   (-1,6)
+                   , (-1,6)
+                   , ( -2.8, 3)
+                   , ( -2.8, 3)
+                   , ( -3, 3)
+                   , ( -3, 3)
+                   , (-7,-3)
+                   , (-7,-3)
+                   , (-6.75, -3.25)
+                   , (-6.75, -3.25)
+                   , (0, -3.5)
+                   , (6.75, -3.25)
+                   , (6.75, -3.25)
+                   , (7,-3) 
+                   , (7,-3)
+                   , ( 3, 3)
+                   , ( 3, 3)
+                   , ( 2.8, 3)
+                   , ( 2.8, 3)
+                   , (1, 6)
+                   , (1,6)
+                   , (0, 5.9)
+                   ]), grey(0.3))
+                & bottom              
+bottom = colored(solidClosedCurve([
+                   (-6.75, -3.25)
+                   , (-4, -4.25)
+                   , (4, -4.25)
+                   , (6.75, -3.25)
+                   ]), grey(0.45)) 
+
+inSightRover =  colored(solidRectangle(12,0.1), grey(0.4))
+              & colored(translated(solidRectangle(8,2), 0, -1), grey(0.4))
+              & colored(translated(bulb, -4, 0), yellow)
+              & translated(solidRectangle(0.2, 1), 2, 0.5)
+              & translated(solidRectangle(0.6, 0.7), 1.7, 0.35)
+              & translated(solidRectangle(0.5, 0.4), -3.85, -2)
+              & translated(solidRectangle(0.5, 0.4), -3.5, -2.1)
+              & translated(solidRectangle(0.5, 0.4), 3.85, -2)
+              & translated(solidRectangle(0.5, 0.4), 3.5, -2.1)
+              & colored(oneLeg, grey(0.4))
+              & colored(twoLeg, grey(0.4))
+              & colored(threeLeg, grey(0.4))  
+bulb = thickArc(0, 180, 1, 0.2) 
+              & thickArc(0, 180, 0.8, 0.2) 
+              & thickArc(0, 180, 0.6, 0.2)
+              & thickArc(0, 180, 0.4, 0.2)              
+              & thickArc(0, 180, 0.2, 0.2)
+              & thickArc(0, 180, 0.1, 0.3) 
+oneLeg = translated(rotated(solidRectangle(4.5, 0.15), 130), 5.5, -1.8)
+       & translated(rotated(solidRectangle(4.5, 0.15), 155), 4.78, -2.6)
+       & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), -45), 6.8, -3.5)      
+twoLeg = translated(rotated(solidRectangle(4.5, 0.15), -130), -5.5, -1.8)
+       & translated(rotated(solidRectangle(4.5, 0.15), -155), -4.78, -2.6)
+       & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), 45), -6.8, -3.5)       
+threeLeg = translated(rotated(solidRectangle(1.5, 0.15), 90), 0, -2.7)
+    & translated(rotated(solidRectangle(1.5, 0.15), 110), -0.3, -2.7)
+    & translated(rotated(solidRectangle(1.5, 0.15), -110), 0.3, -2.7)
+    & translated(rotated(scaled(solidCircle(0.6), 0.2, 1), 90), 0, -3.5)
+
+inSightRoverTopView = 
+                     colored(translated(solidCircle(0.3), 2,2), blue)
+                     & colored(translated(solidCircle(1.4), 2,2), grey(0.6))
+                     
+                     & colored(polyline([(0, -5), (2, -5), (2, -4), (3, -4), (3, -2), (-2, -2), (-2, -3), (-1, -3), (-1, -4), (0, -4), (0, -5)]), white)
+                      
+                     & translated(colored(solidCircle(0.1), white), 0, -3)
+                     & translated(colored(solidCircle(0.1), white), 1, -3)
+                     & translated(colored(solidCircle(0.1), white), 2, -3)
+                     & translated(colored(solidCircle(0.1), white), 1, -4)
+                     
+                     & colored(translated(cube, 0.5, -4.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 1.5, -4.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 0.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 1.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 2.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 2.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 1.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, -0.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 0.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, -0.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, -1.5, -2.5), light(dark(dark(dark(blue)))))
+                     
+                     
+                     
+                     & rotated(translated(colored(polyline([(0, -5), (2, -5), (2, -4), (3, -4), (3, -2), (-2, -2), (-2, -3), (-1, -3), (-1, -4), (0, -4), (0, -5)]), white)
+                      
+                     & translated(colored(solidCircle(0.1), white), 0, -3)
+                     & translated(colored(solidCircle(0.1), white), 1, -3)
+                     & translated(colored(solidCircle(0.1), white), 2, -3)
+                     & translated(colored(solidCircle(0.1), white), 1, -4)
+                     
+                     & colored(translated(cube, 0.5, -4.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 1.5, -4.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 0.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 1.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 2.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 2.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 1.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, -0.5, -3.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, 0.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, -0.5, -2.5), light(dark(dark(dark(blue)))))
+                     & colored(translated(cube, -1.5, -2.5), light(dark(dark(dark(blue))))), -2, 0), -90)
+
+                     & colored(rotated(solidPolygon(points), 22.5), grey(0.3))
+                     & thickPolyline([(-5.25, -3.75), (-6, -6), (-3.75, -5.25)], 0.1) 
+                     & thickPolyline([(-4.5, -4.5), (-6, -6), (-4.5, -4.5)], 0.1) 
+                     & translated(rotated(scaled(solidCircle(0.8), 0.2, 1), 45),-5.95, -5.95)
+                     
+                     & thickPolyline([(5.25, -3.75), (6, -6), (3.75, -5.25)], 0.1) 
+                     & thickPolyline([(4.5, -4.5), (6, -6), (4.5, -4.5)], 0.1) 
+                     & translated(rotated(scaled(solidCircle(0.8), 0.2, 1), -45),5.95, -5.95)
+                     
+                     & rotated(thickPolyline([(5.25, -3.75), (6, -6), (3.75, -5.25)], 0.1) 
+                     & thickPolyline([(4.5, -4.5), (6, -6), (4.5, -4.5)], 0.1) 
+                     & translated(rotated(scaled(solidCircle(0.8), 0.2, 1), -45),5.95, -5.95), 135)
+points = [p1, p2, p3, p4, p5, p6, p7, p8]
+
+
+------background scene 6 & 7
+p1 = (0,7)
+p2 = rotatedPoint(p1, 360/8)
+p3 = rotatedPoint(p2, 360/8)
+p4 = rotatedPoint(p3, 360/8)
+p5 = rotatedPoint(p4, 360/8)
+p6 = rotatedPoint(p5, 360/8)
+p7 = rotatedPoint(p6, 360/8)
+p8 = rotatedPoint(p7, 360/8)
+
+cube = solidRectangle(1,1)
+
+sun = translated(colored(solidCircle(0.5),bright(yellow)),7,3)
+
+background6 = sun
+             & translated(surface, 0, -6)
+             & sky
+             & solidRectangle(20,20)
+
+sky = translated(colored(solidCircle(6),RGBA(1,0.9,0.14,0.1)),7,3)
+    & translated(colored(solidCircle(9),RGBA(1,0.66,0.27,0.3)),7,3)
+    & translated(colored(solidCircle(12),RGBA(0.14,0.69,0.95,0.1)),7,3)
+    & translated(colored(solidCircle(20),RGBA(0.7,0.69,0.95,0.7)),7,3)
+    & solidRectangle(20,20)
+    & colored(solidRectangle(20,20), translucent(dark(white)))
+    
+surface = colored(solidPolygon([(-10,0),(-9,0.5),(-8,0.5),(-7,1),(-6,0.5),(-5,0.3),(-4,0.2)]), dark(orange))
+        & colored(solidPolygon([(-10,-10),(-10,1.35),(-9,1.6),(-8,1.75),(-7.5,1.4),(-7,1),(-6,0.5),(-5,0.3),(-4,0.2),(-3,0),(-2,-0.1),(-0,0),(0,0),(2,0.5),(3,0.5),(4,0.75),(5,0.5),(6,0.45),(7,0.75),(8,0.9),(9,1.2),(10,1.3),(10,-10)]), rgb(224, 138, 85))
+        
+
+
+
+
+
+crater = colored(solidCircle(2),translucent(brown))
+        & solidCircle(2)
+
+
+rock = colored(solidPolygon(pointsB),translucent(dark(white)))
+       & colored(solidPolygon(pointsB),orange)
+
+pointsB = [(1,1),(2,0),(1,-2),(-1,-2),(-2,-1),(-1,1)]
