@@ -1,0 +1,233 @@
+let x = 292;
+let y = 0;
+let y2 = 0;
+let rY = 0;
+let s = 1;
+let ms = 7;
+let r = 0;
+let ln = 5
+let p = -100
+let w = 50
+let sw = 600
+let l = 50
+
+function setup() {
+  createCanvas(600, 700);
+  frameRate(60);
+}
+
+function draw() {
+  background(115);
+  background3(0, y2, width, height);
+  background2(0, y, width, height);
+  movingVehicles();
+  car();
+}
+
+function car() {
+  if (keyIsDown(LEFT_ARROW)) {
+    x -= ms;
+  }
+  
+
+  if (keyIsDown(RIGHT_ARROW)) {
+    x += ms;
+  }
+  
+  
+  if (x < -10) {
+    x = width
+  }
+
+  if (x > width) {
+    x = -10
+  }
+
+  s += 0.001
+  if (s > 20) {
+    s = 20;
+  }
+  y = y + s;
+  if (y > height) {
+    y = 0;
+  }
+
+  s += 0.001
+  if (s > 20) {
+    s = 20;
+  }
+  y2 = y2 + s;
+  if (y2 > height) {
+    y2 = 0;
+  }
+
+  carDesign();
+}
+
+function carDesign() {
+  translate(x-215, height-275);
+  push()
+  fill(255, 0, 0)
+  rect(200, 100, 50, 100);
+  noStroke()
+  rect(204, 98, 42, 100);
+  rect(208, 96, 34, 100);
+  pop()
+  
+
+   push()
+  fill(175, 224, 224)
+  noStroke()
+  rect(212, 135, 25, 6);
+  rect(217, 130, 15, 6);
+  rect(210, 140, 6, 6);
+  rect(233, 140, 6, 6);
+  pop()
+  
+   push()
+  fill(132, 132, 132)
+  noStroke()
+  rect(214, 103, 20,20);
+  pop()
+  
+  push()
+  fill(132, 132, 132)
+  rect(218, 110, 10,3);
+  rect(218, 107, 10,3);
+  rect(218, 113, 10,3);
+  pop()
+  
+  push()
+  fill(0, 0, 0)
+  noStroke()
+  rect(195, 110, 5, 25);
+  rect(195, 165, 5, 25);
+  rect(251, 165, 5, 25);
+  rect(251, 110, 5, 25);
+  pop()
+  
+  
+  push()
+  fill(0,0,0)
+  noStroke()
+  rect(212, 175, 25,25);
+  pop()
+
+  
+  push()
+  fill(239, 124, 52)
+  noStroke()
+  rect(212, 201, 25, 17)
+  fill(255, 112, 22)
+  noStroke()
+  rect(214.5, 218, 20, 4);
+  fill(255, 98, 0)
+  noStroke()
+  rect(217, 222, 15, 4);
+  fill(255, 98, 0)
+  noStroke()
+  rect(219.5, 226, 10, 4);
+  fill(255, 98, 0)
+  noStroke()
+  rect(222, 230, 5, 4);
+  pop()
+  
+  push()
+  fill(59, 158, 249)
+  noStroke()
+  rect(220, 201, 10, 17);
+  fill(59, 158, 249)
+  noStroke()
+  rect(222.5, 218, 5, 4);
+  pop()
+}
+
+function background2(x, y, w, h) {
+  let c = color(255, 210, 1);
+  fill(c);
+  noStroke();
+
+  rect(310, y, 5, 700);
+  rect(300, y, 5, 700);
+
+  let l = color(255, 255, 255);
+  fill(l);
+  noStroke();
+
+  rect(150, y + 525, 15, 60);
+  rect(450, y + 525, 15, 60);
+
+  rect(150, y + 350, 15, 60);
+  rect(450, y + 350, 15, 60);
+
+  rect(150, y + 175, 15, 60);
+  rect(450, y + 175, 15, 60);
+
+  rect(150, y, 15, 60);
+  rect(450, y, 15, 60);
+
+
+  rect(5, y, 5, 700);
+  rect(590, y, 5, 700);
+}
+
+function background3(x, y2, w, h) {
+  let c = color(255, 210, 1);
+  fill(c);
+  noStroke();
+
+  rect(310, y2 - height, 5, 700);
+  rect(300, y2 - height, 5, 700);
+
+  let l = color(255, 255, 255);
+  fill(l);
+  noStroke();
+
+  rect(150, y2 - height + 525, 15, 60);
+  rect(450, y2 - height + 525, 15, 60);
+
+  rect(150, y2 - height + 350, 15, 60);
+  rect(450, y2 - height + 350, 15, 60);
+
+  rect(150, y2 - height + 175, 15, 60);
+  rect(450, y2 - height + 175, 15, 60);
+
+  rect(150, y2 - height, 15, 60);
+  rect(450, y2 - height, 15, 60);
+
+
+  rect(5, y2 - height, 5, 700);
+  rect(590, y2 - height, 5, 700);
+
+}
+
+
+function movingVehicles() {
+  fill(225)
+  if (p<=2300){
+    fill(20)
+    p += s
+    rect(sw/ln-(0.5*w),p,w,l)
+    rect(4*sw/ln-(0.5*w),p,w,l)
+    rect(3*sw/ln-(0.5*w),p-200,w,l)
+    rect(4*sw/ln-(0.5*w),p-200,w,l)
+    rect(2*sw/ln-(0.5*w),p-400,w,l)
+    rect(4*sw/ln-(0.5*w),p-600,w,l)
+    rect(sw/ln-(0.5*w),p-800,w,l)
+    rect(3*sw/ln-(0.5*w),p-800,w,l)
+    rect(4*sw/ln-(0.5*w),p-1000,w,l)
+    rect(sw/ln-(0.5*w),p-1200,w,l)
+    rect(2*sw/ln-(0.5*w),p-1200,w,l)
+    rect(3*sw/ln-(0.5*w),p-1400,w,l)
+    rect(4*sw/ln-(0.5*w),p-1400,w,l)
+    rect(sw/ln-(0.5*w),p-1400,w,l)
+    rect(sw/ln-(0.5*w),p-1600,w,l)
+    rect(2*sw/ln-(0.5*w),p-1600,w,l)
+    }
+
+  if (p>2300){
+    p = -100
+    s += 0.5
+  }
+  
+}
